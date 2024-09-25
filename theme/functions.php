@@ -195,3 +195,15 @@ require get_template_directory() . '/inc/template-tags.php';
  * Functions which enhance the theme by hooking into WordPress.
  */
 require get_template_directory() . '/inc/template-functions.php';
+
+function my_acf_google_map_api( $api ) {
+    $api['key'] = 'AIzaSyAl4D2fHE-uzWoUi_iSGB1J0tTWlBnFhnQ'; // Remplace par ta clé API
+    return $api;
+}
+add_filter('acf/fields/google_map/api', 'my_acf_google_map_api');
+
+function enqueue_leaflet_scripts() {
+    wp_enqueue_style('leaflet-css', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.css');
+    wp_enqueue_script('leaflet-js', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js', array(), null, true);
+}
+add_action('wp_enqueue_scripts', 'enqueue_leaflet_scripts');

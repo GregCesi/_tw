@@ -23,6 +23,8 @@
     </div>
 </div>
 
+<div id="map" style="height: 400px; width: 100%;"></div>
+
 
 <script>
     document.getElementById('openPopup').addEventListener('click', function() {

@@ -14,6 +14,8 @@ $descImage = get_field('description_image');
 $image = get_field('image');
 $detail = get_field('detail');
 
+
+
 ?>
 
 <body>
@@ -59,6 +61,10 @@ $detail = get_field('detail');
                     NOUS REJOINDRE
                 </a>
             <div>
+        
+        </section>
+
+        <section>
         
         </section>
     </main>
