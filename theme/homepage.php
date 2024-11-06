@@ -65,7 +65,82 @@ $detail = get_field('detail');
         </section>
 
         <section>
-        
+        <!-- Splide CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.0.7/dist/css/splide.min.css">
+
+        <!-- Splide JS -->
+        <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.0.7/dist/js/splide.min.js"></script>
+
+        <?php
+        $images = get_field('photos'); // Récupération du champ galerie
+        if( $images ): ?>
+            <div id="image-carousel" class="splide">
+                <div class="splide__track">
+                    <ul class="splide__list">
+                        <?php foreach( $images as $image ): ?>
+                            <li class="splide__slide">
+                                <div class="image-wrapper w-full h-[400px]">
+                                    <img src="<?php echo esc_url($image['url']); ?>" alt="<?php echo esc_attr($image['alt']); ?>" class="w-full h-full object-cover rounded-lg shadow-lg">
+                                </div>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+                <!-- Pagination sous forme de points -->
+                <div class="splide__pagination"></div>
+            </div>
+        <?php endif; ?>
+
+
+        <div id="image-carousel" class="splide">
+            <div class="splide__track">
+                <ul class="splide__list">
+                    <!-- Images -->
+                </ul>
+            </div>
+            <div class="splide__arrows">
+                <button class="splide__arrow splide__arrow--prev">Prev</button>
+                <button class="splide__arrow splide__arrow--next">Next</button>
+            </div>
+        </div>
+
         </section>
     </main>
 </body>
+
+<script>
+
+document.addEventListener( 'DOMContentLoaded', function () {
+    new Splide( '#image-carousel', {
+        type   : 'loop',
+        perPage: 3,  // Trois images visibles en même temps
+        focus  : 'center',  // L'image centrale est mise en avant
+        gap    : '2rem',  // Espacement entre les images
+        pagination: true, // Afficher les points de pagination
+        breakpoints: {
+            768: {
+                perPage: 1,  // Une seule image visible sur les petits écrans
+                gap: '1rem',
+            },
+            1024: {
+                perPage: 2,  // Deux images sur les tablettes
+            },
+        },
+    }).mount();
+});
+
+</script>
+
+<style>
+    .splide__slide.is-active img {
+    transform: scale(1.05);  /* Agrandir légèrement l'image centrale */
+    }
+
+    .splide__slide img {
+        transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .splide__slide:not(.is-active) img {
+        opacity: 0.7; /* Réduire légèrement l'opacité des images adjacentes */
+    }
+</style>

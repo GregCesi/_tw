@@ -207,3 +207,20 @@ function enqueue_leaflet_scripts() {
     wp_enqueue_script('leaflet-js', 'https://unpkg.com/leaflet@1.7.1/dist/leaflet.js', array(), null, true);
 }
 add_action('wp_enqueue_scripts', 'enqueue_leaflet_scripts');
+
+add_filter('wpcf7_validate_file', 'wpcf7_custom_file_validation', 10, 2);
+function wpcf7_custom_file_validation($result, $tag) {
+    $file = isset($_FILES[$tag->name]) ? $_FILES[$tag->name] : null;
+
+    if ($file && $file['type'] != 'application/pdf') {
+        $result->invalidate($tag, "Seuls les fichiers PDF sont autorisés.");
+    }
+
+    return $result;
+} 
+
+function enqueue_custom_theme_styles() {
+    wp_enqueue_style('theme-style', get_stylesheet_directory_uri() . '/theme/style.css');
+}
+add_action('wp_enqueue_scripts', 'enqueue_custom_theme_styles');
+
