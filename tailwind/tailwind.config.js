@@ -12,7 +12,19 @@ module.exports = {
 	],
 	theme: {
 		// Extend the default Tailwind theme.
-		extend: {},
+		extend: {
+			screens: {
+				'mid-xl': '1380px', // Ce sera la nouvelle classe personnalisée pour 1280px et plus
+			},
+			colors: {
+				primary: {
+					DEFAULT: '#1E40AF', // Bleu principal (défaut)
+				},
+				secondary: {
+					DEFAULT: '#FF231F', // Bleu principal (défaut)
+				},
+			},
+		},
 	},
 	corePlugins: {
 		// Disable Preflight base styles in builds targeting the editor.

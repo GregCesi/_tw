@@ -37,56 +37,79 @@ if ($menu_items) {
 }
 ?>
 
-<header id="masthead" class="bg-black text-white">
-    <div class="mx-8 flex flex-col justify-between p-4">
-        <div class="flex justify-between p-4">
-            <!-- <?php echo var_dump($menu_logo); ?> -->
-            <a href="<?php echo home_url(); ?>" class="text-lg font-bold">
-                <!-- <img src="<?php echo $menu_logo['url']; ?>"> -->
-                 CATRA
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<header id="masthead" class="bg-white text-black">
+    <div class="flex flex-col justify-between">
+        <div class="flex justify-between">
+            <a href="<?php echo home_url(); ?>" class="w-64 h-auto max-mid-xl:w-56">
+                <img src="<?php echo $menu_logo['url']; ?>">
             </a>
 
             <!-- Menu Classique -->
-            <nav class="max-lg:hidden">
-                <ul class="flex gap-4">
+            <nav class="max-xl:hidden p-8 place-self-center max-mid-xl:text-sm 2xl:text-lg">
+                <ul class="flex gap-4 font-bold">
                     <?php foreach ($menu_data as $item): ?>
                         <?php if (!empty($item['children'])): ?>
                             <li class="relative menu-item-has-children">
-                                <a href="<?php echo esc_url($item['url']); ?>"><?php echo esc_html($item['title']); ?></a>
+                                <a class="hover:text-secondary" href="<?php echo esc_url($item['url']); ?>"><?php echo esc_html($item['title']); ?></a>
                                 <ul class="sub-menu bg-black">
                                     <?php foreach ($item['children'] as $child): ?>
-                                        <li class="p-4 hover:font-bold"><a href="<?php echo esc_url($child['url']); ?>"><?php echo esc_html($child['title']); ?></a></li>
+                                        <li class="p-4 hover:font-bold"><a class="hover:text-secondary" href="<?php echo esc_url($child['url']); ?>"><?php echo esc_html($child['title']); ?></a></li>
                                     <?php endforeach; ?>
                                 </ul>
                             </li>
                         <?php else: ?>  
+                            <?php if ($item['title'] != 'Nous contacter'): ?>
                             <li class="relative hover:bg-gray-600 lg:hover:bg-transparent">
-                                <a href="<?php echo esc_url($item['url']); ?>"><?php echo esc_html($item['title']); ?></a>
+                                <a class="hover:text-secondary" href="<?php echo esc_url($item['url']); ?>"><?php echo esc_html($item['title']); ?></a>
                             </li>
+                            <?php endif; ?>
                         <?php endif; ?>
                     <?php endforeach; ?>
                 </ul>
             </nav>
 
-            <!-- Bouton Hamburger pour Mobile -->
-            <button id="menu-toggle" class="block lg:hidden">
-                <!-- Icône Hamburger Fermé (3 lignes complètes) -->
-                <svg id="icon-menu-closed" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                </svg>
+            <div class="flex gap-4 font-bold m-8 p-2 place-self-center border-solid border-2 border-stone-400 hover:text-secondary max-xl:hidden max-mid-xl:text-sm 2xl:text-lg">
+                <?php
+                // Filtrer pour obtenir l'item 'Nous contacter' dans le menu
+                $contact_item = array_filter($menu_data, function($item) {
+                    return $item['title'] === 'Nous contacter';
+                });
+                
+                // Vérifier si l'item existe et récupérer le premier résultat
+                if (!empty($contact_item)) :
+                    $contact_item = reset($contact_item); // Prend le premier élément de l'array filtré
+                ?>
+                    <i class="fas fa-envelope place-self-center"></i> <!-- Icône d'enveloppe -->
+                    <span><a href="<?php echo esc_url($contact_item['url']); ?>"><?php echo esc_html($contact_item['title']); ?></a></span>
+                <?php endif; ?>
+            </div>
 
-                <!-- Icône Hamburger Ouvert (2 lignes complètes, 1 ligne plus petite) -->
-                <svg id="icon-menu-opened" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                </svg>
-            </button>    
+            <!-- Bouton Hamburger pour Mobile -->
+            <button id="menu-toggle" class="flex gap-2 m-8 p-2 place-self-center border-solid border-2 border-stone-700	 xl:hidden">
+                <div>
+                    <!-- Icône Hamburger Fermé (3 lignes complètes) -->
+                    <svg id="icon-menu-closed" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+
+                    <!-- Icône Hamburger Ouvert (2 lignes complètes, 1 ligne plus petite) -->
+                    <svg id="icon-menu-opened" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+                    </svg>
+                </div>    
+                <span>MENU</span>
+            </button>
         </div>
     </div>
 </header>
 
 <!-- Sidebar pour le menu hamburger -->
-<aside id="sidebar-menu" class="fixed top-0 left-0 w-64 h-full bg-black text-white transform -translate-x-full transition-transform duration-300">
-    <div class="flex flex-col p-4">
+<aside id="sidebar-menu" class="fixed top-0 left-0 w-64 h-full bg-white text-black shadow-2xl transform -translate-x-full transition-transform duration-300">
+    <div class="flex flex-col m-4">
         <button id="close-sidebar" class="self-end">
             <!-- Icône de fermeture de la sidebar -->
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -94,25 +117,31 @@ if ($menu_items) {
             </svg>
         </button>
 
-        <ul class="flex flex-col gap-4 mt-8">
+        <a href="<?php echo home_url(); ?>" class="w-56 h-auto bg-red-800">
+            <img src="<?php echo $menu_logo['url']; ?>">
+        </a>
+
+        <ul class="flex flex-col gap-4">
             <!-- Liste des éléments du menu -->
             <?php foreach ($menu_data as $item): ?>
                 <?php if (!empty($item['children'])): ?>
-                    <li id="menu-burger" class="menu-burger relative p-2 flex flex-col gap-2">
-                        <div class="flex gap-2 items-center">
-                            <a href="<?php echo esc_url($item['url']); ?>"><?php echo esc_html($item['title']); ?>   
+                    <li class="menu-burger relative p-2 flex flex-col gap-2">
+                        <div class="flex gap-2 justify-between items-center">
+                            <a class="hover:text-secondary" href="<?php echo esc_url($item['url']); ?>"><?php echo esc_html($item['title']); ?>   
                             </a>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                            <span class="p-2 border-2 border-stone-700">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+                            </span>
                         </div>
-                        <ul id="sub-menu-burger" class="sub-menu-burger hidden bg-black">
+                        <ul class="sub-menu-burger hidden bg-white">
                             <?php foreach ($item['children'] as $child): ?>
-                                <li class="sub-menu-item-burger p-2 hover:font-bold"><a href="<?php echo esc_url($child['url']); ?>"><?php echo esc_html($child['title']); ?></a></li>
+                                <li class="sub-menu-item-burger p-2 hover:font-bold"><a class="hover:text-secondary" href="<?php echo esc_url($child['url']); ?>"><?php echo esc_html($child['title']); ?></a></li>
                             <?php endforeach; ?>
                         </ul>
                     </li>
                 <?php else: ?>  
                     <li class="relative lg:hover:bg-transparent p-2">
-                        <a href="<?php echo esc_url($item['url']); ?>"><?php echo esc_html($item['title']); ?></a>
+                        <a class="hover:text-secondary" href="<?php echo esc_url($item['url']); ?>"><?php echo esc_html($item['title']); ?></a>
                     </li>
                 <?php endif; ?>
             <?php endforeach; ?>
@@ -127,16 +156,13 @@ if ($menu_items) {
     transform-origin: top center;
     transition: transform 0.3s ease-in-out;
     position: absolute;
-    background: #000;
+    background: #fff;
     top: calc(100% + 1rem);
     left: 0;
-    min-width: 125px;
-    /* max-width: 75vw; */
+    min-width: 200px;
     z-index: 10;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, .16), 0 2px 10px 0 rgba(0, 0, 0, .12);
-    /* margin: 5px 0 0; */
     border-radius: 3px;
-    /* padding: 1rem; */
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -164,10 +190,10 @@ if ($menu_items) {
 
 /* Style de l'icône */
 .menu-item-has-children > a::after {
-    content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="white" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>');
+    content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="black" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>');
     display: inline-block;
     vertical-align: middle;
-    margin-left: 0.5rem;
+    margin-top: 0.05rem;
     transform: rotate(0);
     transition: transform 0.3s ease;
 }
@@ -189,8 +215,8 @@ if ($menu_items) {
     top: 50%;
     transform: translateY(-50%);
     width: 3px; /* Largeur de la barre */
-    height: 200%; /* Hauteur de la barre, peut être ajustée */
-    background-color: #fff; /* Couleur de la barre */
+    height: 150%; /* Hauteur de la barre, peut être ajustée */
+    background-color: #FF231F; /* Couleur de la barre */
 }
 
 /* Supprimer le changement de couleur de fond au survol */
@@ -200,21 +226,15 @@ if ($menu_items) {
 }
 
 /* Barre visuelle qui apparaît à gauche sur hover */
-/*Ici pour GPT*/
-.sub-menu-item-burger li:hover::before {
-    content: '';
-    position: absolute;
-    left: -10px; /* Place la barre à gauche du texte */
-    top: 0;
-    height: 25%; /* La hauteur est égale à celle du texte */
-    width: 3px; /* Ajuste la largeur de la barre */
-    background-color: #fff; /* Couleur de la barre */
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
 .rotate-90 > a::after {
     transform: rotate(90deg);
     transition: transform 0.3s ease;
+}
+
+#sidebar-menu {
+    overflow-y: auto;
+    max-height: 100vh;
+    -webkit-overflow-scrolling: touch; /* Pour un scroll fluide sur mobile */
 }
 </style>
 
@@ -228,6 +248,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var menuBurger = document.getElementById('menu-burger');
     var subMenuBurger = document.getElementById('sub-menu-burger');
+
+    // Sélectionner tous les éléments de menu avec sous-menus
+    const menuItemsWithChildren = document.querySelectorAll('.menu-burger');
 
     // Fonction pour fermer la sidebar
     function closeSidebarMenu() {
@@ -244,18 +267,23 @@ document.addEventListener('DOMContentLoaded', function() {
         iconMenuOpened.classList.toggle('hidden');
     });
 
-    // Gestion du sous-menu burger
-    menuBurger.addEventListener('click', function(e) {
-        e.preventDefault(); // Empêche la navigation par défaut
+    // Parcourir chaque élément parent pour lui ajouter un événement de clic
+    menuItemsWithChildren.forEach(menuItem => {
+        const toggleIcon = menuItem.querySelector('svg'); // Icône de flèche du menu parent
+        const subMenu = menuItem.querySelector('.sub-menu-burger'); // Sous-menu de cet élément
 
-        var link = menuBurger.querySelector('svg');
-        link.classList.toggle('rotate-90');
+        menuItem.addEventListener('click', function(event) {
+            event.preventDefault(); // Empêcher le comportement par défaut du lien
 
-        if (subMenuBurger.classList.contains('hidden')) {
-            subMenuBurger.classList.remove('hidden');
-        } else {
-            subMenuBurger.classList.add('hidden');
-        }
+            // Basculer la classe 'hidden' pour afficher/masquer le sous-menu
+            if (subMenu.classList.contains('hidden')) {
+                subMenu.classList.remove('hidden');
+                toggleIcon.classList.add('rotate-90'); // Ajouter une rotation à l'icône
+            } else {
+                subMenu.classList.add('hidden');
+                toggleIcon.classList.remove('rotate-90'); // Réinitialiser l'icône
+            }
+        });
     });
 
     // Fermeture de la sidebar quand on clique sur le bouton fermer
@@ -265,7 +293,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fonction pour fermer la sidebar quand l'écran est redimensionné à lg (1024px ou plus)
     function closeMenuOnResize() {
-        if (window.innerWidth >= 1024) { // Taille de l'écran >= 1024px
+        if (window.innerWidth >= 1280) { // Taille de l'écran >= 1024px
             closeSidebarMenu(); // Appel à la fonction pour fermer la sidebar
         }
     }
